@@ -1,14 +1,17 @@
 var command = process.argv[2];
 var entertainment = process.argv[3];
 
+
 var tKeys = require("./keys.js");
 var Twitter = require("twitter");
-var theKeys = tKeys.twitterKeys
+var theKeys = tKeys.twitterKeys;
 
 var spotify = require("spotify");
 
+
 var request = require('request');
 var fs = require('fs');
+
 
 switch (command) {
   case 'my-tweets':
@@ -46,6 +49,7 @@ function myTweets() {
     response) {
     if (error) {
       console.error('error: ', error);
+
     } else {
       tweets.forEach(function(element) {
         console.log("Date: " + JSON.stringify(element["created_at"]) + " Tweet: " + JSON.stringify(element[
@@ -56,7 +60,33 @@ function myTweets() {
 }
 
 
-function spotifyThisSong() {};
+function spotifyThisSong() {
+  var querySong = entertainment ? entertainment : "The Sign";
+  var theSong = {};
+  spotify.search({
+    type: 'track',
+    query: querySong
+  }, function(error, data) {
+    if (error) {
+      console.error('error: ', error);
+    } else {
+      matches = []
+      theSongs = data.tracks.items;
+      for (var i = 0; i < theSongs.length; i++) {
+        if (JSON.stringify(theSongs[i].name) == JSON.stringify(querySong)) {
+          matches.push(theSongs[i]);
+        }
+      }
+      console.log(matches.length);
+    }
+  });
+}
+
+// theSong.name = JSON.stringify(data.tracks.items[0].name);
+// theSong.album = JSON.stringify(data.tracks.items[0].album.name);
+// theSong.artist = JSON.stringify(data.tracks.items[0].artists[0].name);
+// theSong.songPreview = JSON.stringify(data.tracks.items[0].preview_url);
+// console.log(JSON.stringify(theSong));
 
 
 
